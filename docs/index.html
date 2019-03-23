@@ -4,12 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>js-dialog live demo</title>
   <link rel="stylesheet" href="../src/dialog.css">
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+    .demo-box {
+      width: 600px;
+      margin: 0 auto;
+      padding: 15px;
+    }
+    .box1 {
+      position: relative;
+      height: 400px;
+      border: solid 1px #E8E8E8;
+    }
+  </style>
 </head>
 <body>
 <div>
-  <button id="btn">show</button>
+  <div class="demo-box">
+    <button id="btn">Show/Hide</button>
+    <button id="btn2">Show on box</button>
+  </div>
+  <div class="demo-box box1" id="box1"></div>
 </div>
 <script src="dist/index.js"></script>
 </body>
