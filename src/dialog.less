@@ -27,7 +27,6 @@
 .js-dialog {
   background-color: #fff;
   position: relative;
-  z-index: 1;
   width: 350px;
   margin-right: auto;
   margin-left: auto;
@@ -35,6 +34,7 @@
   box-sizing: border-box;
   transition: max-height .5s ease;
   border-radius: 3px;
+  overflow: hidden;
 
   &-enter {
     animation: dialog-fade-in .3s;
@@ -64,7 +64,7 @@
     border: none;
     outline: none;
     padding: 0;
-    color: #6d6e73;
+    color: inherit;
     cursor: pointer;
 
     &:hover {
