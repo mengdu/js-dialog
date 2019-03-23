@@ -13,6 +13,7 @@ export default class Dialog {
       width: null,
       zIndex: null,
       className: null,
+      supportHTML: false,
       hasHeader: true,
       hasCloseButton: true,
       closeOnClickMask: true,
@@ -82,7 +83,6 @@ export default class Dialog {
       this.dom.closeBtn.innerHTML = '<span>×</span>'
       this.dom.header.appendChild(this.dom.closeBtn)
     }
-    console.log(options)
     if (options.className) {
       this.dom.warpper.classList.add(options.className)
     }
@@ -107,7 +107,6 @@ export default class Dialog {
     const that = this
 
     on(this.dom.dialog, 'animationend', function () {
-      console.log('animationend', that.visible)
       if (!that.visible) {
         that.dom.warpper.style.display = 'none'
 
