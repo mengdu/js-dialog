@@ -38,6 +38,8 @@ window.addEventListener('load', function () {
   const dialog2 = new Dialog({
     el: document.getElementById('box1'),
     content: 'Hello !',
+    width: '300px',
+    maskBackground: 'rgba(0, 0, 0, 0.13)',
     cancel () {
       console.log('cancel')
       dialog2.hide()
