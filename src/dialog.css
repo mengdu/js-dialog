@@ -1,6 +1,6 @@
 .js-dialog-wrapper,
 .js-dialog-mask {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
@@ -24,8 +24,7 @@
   background-color: #fff;
   position: relative;
   z-index: 1;
-  width: 400px;
-  max-height: calc(100vh - 24px * 2);
+  width: 350px;
   margin-right: auto;
   margin-left: auto;
   box-shadow: 0 5px 20px rgba(26, 26, 26, 0.1);
@@ -54,8 +53,8 @@
   height: 20px;
   text-align: center;
   line-height: 20px;
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: 100;
   background: none;
   border: none;
   outline: none;
@@ -70,14 +69,43 @@
   padding: 15px;
   overflow-x: hidden;
   overflow-y: auto;
+  color: #182229;
+  max-height: calc(100vh - 24px * 2 - 100px);
+}
+.js-dialog-footer {
+  text-align: right;
+  padding: 15px;
+}
+.js-dialog--cancel,
+.js-dialog--confirm {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 20px;
+  color: #23263a;
+  cursor: pointer;
+}
+.js-dialog--cancel:hover {
+  color: #D8364B;
+  background-color: #f9ecec;
+}
+.js-dialog--confirm {
+  margin-left: 10px;
+}
+.js-dialog--confirm:hover {
+  color: #1297e4;
+  background-color: #f1f0f0;
 }
 @keyframes dialog-fade-in {
   0% {
-    transform: rotate(180deg);
+    transform: scale(0.9);
     opacity: 0;
   }
   100% {
-    transform: rotate(0);
+    transform: scale(1);
     opacity: 1;
   }
 }

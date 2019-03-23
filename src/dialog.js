@@ -1,23 +1,28 @@
 'use strict'
-
-function createElement (tag, attrs = {}) {
-  const el = document.createElement(tag)
-
-  for (let key in attrs) {
-    el[key] = attrs[key]
-  }
-
-  return el
-}
-
-function on (el, event, handle) {
-  el.addEventListener(event, handle, false)
-}
+import {
+  createElement,
+  on
+} from './utils'
 
 export default class Dialog {
   constructor (options) {
     const that = this
-    this.options = options = options || {}
+    this.options = options = {
+      el: document.body,
+      title: 'Message',
+      zIndex: null,
+      hasHeader: true,
+      hasCloseButton: true,
+      closeOnClickMask: true,
+      closeOnKeyEscape: true,
+      onClose: null,
+      onOpen: null,
+      cancel: null,
+      confirm: null,
+      cancelButtonText: 'Cancel',
+      confirmButtonText: 'Confirm',
+      ...options
+    }
 
     this.dom = {
       warpper: createElement('DIV', {
@@ -34,20 +39,58 @@ export default class Dialog {
       }),
       content: createElement('DIV', {
         className: 'js-dialog-content'
+      }),
+      closeBtn: createElement('BUTTON', {
+        className: 'js-dialog--close'
+      }),
+      footer: createElement('DIV', {
+        className: 'js-dialog-footer'
+      }),
+      cancel: createElement('BUTTON', {
+        className: 'js-dialog--cancel'
+      }),
+      confirm: createElement('BUTTON', {
+        className: 'js-dialog--confirm'
       })
     }
 
-    this.visibile = false
+    this.visible = false
 
-    this.dom.dialog.appendChild(this.dom.header)
+    options.hasHeader && this.dom.dialog.appendChild(this.dom.header)
     this.dom.dialog.appendChild(this.dom.content)
     this.dom.warpper.appendChild(this.dom.mask)
     this.dom.warpper.appendChild(this.dom.dialog)
 
-    this.dom.header.innerHTML = '<span>' + (options.title || '提示') + '</span><button class="js-dialog--close"><span>×</span></button>'
+    this.dom.cancel.innerHTML = options.cancelButtonText
+    this.dom.confirm.innerHTML = options.confirmButtonText
+    if (typeof options.cancel === 'function') {
+      this.dom.footer.appendChild(this.dom.cancel)
+    }
+    if (typeof options.confirm === 'function') {
+      this.dom.footer.appendChild(this.dom.confirm)
+    }
+    this.dom.dialog.appendChild(this.dom.footer)
+
+    this.dom.header.innerHTML = '<span>' + options.title + '</span>'
+
+    if (options.hasCloseButton) {
+      this.dom.closeBtn.innerHTML = '<span>×</span>'
+      this.dom.header.appendChild(this.dom.closeBtn)
+    }
+
+    this.updateContent(options.content)
+    this.listeners()
+    this.dom.warpper.style.display = 'none'
+
+    options.el.appendChild(this.dom.warpper)
+  }
+
+  listeners () {
+    const that = this
+
     on(this.dom.dialog, 'animationend', function () {
-      console.log('animationend', that.visibile)
-      if (!that.visibile) {
+      console.log('animationend', that.visible)
+      if (!that.visible) {
         that.dom.warpper.style.display = 'none'
 
         setTimeout(function () {
@@ -55,28 +98,48 @@ export default class Dialog {
           that.dom.dialog.classList.remove('js-dialog-enter')
           that.dom.dialog.classList.remove('js-dialog-leave')
         })
+        if (typeof that.options.onClose === 'function') that.options.onClose()
+      } else {
+        if (typeof that.options.onOpen === 'function') that.options.onOpen()
       }
     })
 
     on(this.dom.mask, 'click', function () {
-      that.hide()
+      that.options.closeOnClickMask && that.hide()
     })
 
-    this.updateContent(options.content)
-    this.dom.warpper.style.display = 'none'
-    document.body.appendChild(this.dom.warpper)
+    on(this.dom.closeBtn, 'click', function () {
+      that.hide()
+    })
+    on(this.dom.cancel, 'click', function () {
+      if (typeof that.options.cancel === 'function') {
+        that.options.cancel()
+      }
+    }),
+    on(this.dom.confirm, 'click', function () {
+      if (typeof that.options.confirm === 'function') {
+        that.options.confirm()
+      }
+    })
   }
 
   show () {
     this.dom.dialog.classList.add('js-dialog-enter')
     this.dom.warpper.style.display = ''
-    this.visibile = true
+    this.visible = true
   }
 
   hide () {
-    this.visibile = false
-    this.dom.dialog.classList.add('js-dialog-leave')
-    this.dom.mask.classList.add('js-dialog-mask-leave')
+    const that = this
+    this.visible = false
+    // fix 短时间多次点击问题
+    this.dom.dialog.classList.remove('js-dialog-leave')
+    this.dom.mask.classList.remove('js-dialog-mask-leave')
+
+    setTimeout(function () {
+      that.dom.dialog.classList.add('js-dialog-leave')
+      that.dom.mask.classList.add('js-dialog-mask-leave')
+    })
   }
 
   updateContent (content) {
