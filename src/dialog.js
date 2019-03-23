@@ -10,7 +10,9 @@ export default class Dialog {
     this.options = options = {
       el: document.body,
       title: 'Message',
+      width: null,
       zIndex: null,
+      className: null,
       hasHeader: true,
       hasCloseButton: true,
       closeOnClickMask: true,
@@ -21,6 +23,7 @@ export default class Dialog {
       confirm: null,
       cancelButtonText: 'Cancel',
       confirmButtonText: 'Confirm',
+      maskBackground: null,
       ...options
     }
 
@@ -63,12 +66,14 @@ export default class Dialog {
 
     this.dom.cancel.innerHTML = options.cancelButtonText
     this.dom.confirm.innerHTML = options.confirmButtonText
+
     if (typeof options.cancel === 'function') {
       this.dom.footer.appendChild(this.dom.cancel)
     }
     if (typeof options.confirm === 'function') {
       this.dom.footer.appendChild(this.dom.confirm)
     }
+
     this.dom.dialog.appendChild(this.dom.footer)
 
     this.dom.header.innerHTML = '<span>' + options.title + '</span>'
@@ -76,6 +81,19 @@ export default class Dialog {
     if (options.hasCloseButton) {
       this.dom.closeBtn.innerHTML = '<span>×</span>'
       this.dom.header.appendChild(this.dom.closeBtn)
+    }
+    console.log(options)
+    if (options.className) {
+      this.dom.warpper.classList.add(options.className)
+    }
+    if (options.zIndex !== null) {
+      this.dom.warpper.style.zIndex = options.zIndex
+    }
+    if (options.width) {
+      this.dom.dialog.style.width = options.width
+    }
+    if (options.maskBackground) {
+      this.dom.mask.style.background = options.maskBackground
     }
 
     this.updateContent(options.content)
