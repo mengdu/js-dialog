@@ -4,6 +4,7 @@ const Eslint = require('rollup-plugin-eslint')
 const babel = require('rollup-plugin-babel')
 const Uglify = require('rollup-plugin-uglify')
 const pkg = require('./package.json')
+const style = require('rollup-plugin-style')
 
 const banner =
   '/* eslint-disable */\n' +
@@ -27,10 +28,14 @@ module.exports = {
   ],
   plugins: [
     Eslint.eslint({
-      exclude: ['node_modules/**']
+      exclude: ['node_modules/**', '**/*.css']
     }),
     resolve(),
     commonjs(),
+    style({
+      include: ['**/*.css'],
+      output: 'style'
+    }),
     babel({
       exclude: 'node_modules/**'
     }),
