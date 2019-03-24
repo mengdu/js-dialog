@@ -71,6 +71,7 @@
   overflow-y: auto;
   color: #182229;
   max-height: calc(100vh - 24px * 2 - 100px);
+  font-size: 14px;
 }
 .js-dialog-footer {
   text-align: right;
