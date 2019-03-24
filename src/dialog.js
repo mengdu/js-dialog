@@ -118,7 +118,6 @@ export default class Dialog {
         that.dom.warpper.style.display = 'none'
 
         setTimeout(function () {
-          console.log(that.hadSetStyle)
           if (that.hadSetStyle) {
             that.options.el.style.overflow = that.elOldStyle.overflow === ''
               ? ''
