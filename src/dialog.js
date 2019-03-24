@@ -1,12 +1,15 @@
 'use strict'
 import {
   createElement,
-  on
+  on,
+  // scrollTop,
+  // scrollHeight
+  hasScrollbar,
+  getScrollWidth
 } from './utils'
 
 export default class Dialog {
   constructor (options) {
-    const that = this
     this.options = options = {
       el: document.body,
       title: 'Message',
@@ -25,6 +28,7 @@ export default class Dialog {
       cancelButtonText: 'Cancel',
       confirmButtonText: 'Confirm',
       maskBackground: null,
+      containerOverflowHidden: true,
       ...options
     }
 
@@ -59,6 +63,8 @@ export default class Dialog {
     }
 
     this.visible = false
+    this.elOldStyle = {}
+    this.hadSetStyle = false
 
     options.hasHeader && this.dom.dialog.appendChild(this.dom.header)
     this.dom.dialog.appendChild(this.dom.content)
@@ -107,10 +113,21 @@ export default class Dialog {
     const that = this
 
     on(this.dom.dialog, 'animationend', function () {
+      // 关闭
       if (!that.visible) {
         that.dom.warpper.style.display = 'none'
 
         setTimeout(function () {
+          console.log(that.hadSetStyle)
+          if (that.hadSetStyle) {
+            that.options.el.style.overflow = that.elOldStyle.overflow === ''
+              ? ''
+              : that.elOldStyle.overflow
+            that.options.el.style.marginRight = that.elOldStyle.marginRight === ''
+              ? ''
+              : that.elOldStyle.marginRight
+            that.hadSetStyle = false
+          }
           that.dom.mask.classList.remove('js-dialog-mask-leave')
           that.dom.dialog.classList.remove('js-dialog-enter')
           that.dom.dialog.classList.remove('js-dialog-leave')
@@ -132,7 +149,7 @@ export default class Dialog {
       if (typeof that.options.cancel === 'function') {
         that.options.cancel()
       }
-    }),
+    })
     on(this.dom.confirm, 'click', function () {
       if (typeof that.options.confirm === 'function') {
         that.options.confirm()
@@ -141,13 +158,28 @@ export default class Dialog {
   }
 
   show () {
+    if (this.visible) return
     this.dom.dialog.classList.add('js-dialog-enter')
     this.dom.warpper.style.display = ''
+
+    // 如果盒子存在滚动条隐藏滚动条
+    if (this.options.containerOverflowHidden && hasScrollbar(this.options.el)) {
+      this.elOldStyle = {
+        overflow: this.options.el.style.overflow,
+        marginRight: this.options.el.style.marginRight
+      }
+      this.hadSetStyle = true
+
+      this.options.el.style.overflow = 'hidden'
+      this.options.el.style.marginRight = getScrollWidth() + 'px'
+    }
+
     this.visible = true
   }
 
   hide () {
     const that = this
+    if (!this.visible) return
     this.visible = false
     // fix 短时间多次点击问题
     this.dom.dialog.classList.remove('js-dialog-leave')
@@ -165,5 +197,9 @@ export default class Dialog {
     } else {
       this.dom.content.innerText = content
     }
+  }
+
+  destroy () {
+    this.dom.warpper.remove()
   }
 }
