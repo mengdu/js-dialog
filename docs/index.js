@@ -1,5 +1,6 @@
 'use strict'
 import Dialog from '../src/index'
+import '../src/dialog.css'
 
 window.addEventListener('load', function () {
   const dialog = new Dialog({
@@ -9,6 +10,7 @@ window.addEventListener('load', function () {
     supportHTML: true,
     cancelButtonText: '取消',
     confirmButtonText: '确定',
+    // containerOverflowHidden: true,
     onClose () {
       console.log('close')
     },
@@ -58,6 +60,20 @@ window.addEventListener('load', function () {
     } else {
       dialog2.show()
     }
+  })
+
+  document.getElementById('btn3').addEventListener('click', function () {
+    Dialog.$alert('Hello !').then(function () {
+      console.log('alert: Done')
+    })
+  })
+
+  document.getElementById('btn4').addEventListener('click', function () {
+    Dialog.$confrim('Hello !').then(function () {
+      console.log('confirm: Confirm')
+    }).catch(function () {
+      console.log('confirm: Cancel')
+    })
   })
 
   window.dialog = dialog
