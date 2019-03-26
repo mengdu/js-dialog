@@ -21,7 +21,7 @@ module.exports = {
   output: [
     {
       name: 'Dialog',
-      file: isProduction ? 'dist/bundle.min.js' : 'docs/dist/index.js',
+      file: isProduction ? 'dist/index.js' : 'docs/dist/index.js',
       format: 'umd',
       sourcemap: false
     }
@@ -32,7 +32,7 @@ module.exports = {
     }),
     resolve(),
     commonjs(),
-    style({
+    !isProduction && style({
       include: ['**/*.css'],
       output: 'style'
     }),
