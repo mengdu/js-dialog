@@ -19,11 +19,11 @@ export default function $confirm (msg, optopns = {}) {
         resolve('confirm')
       },
       cancel () {
-        reject('cancel')
         modal.hide()
+        reject(new Error('cancel'))
       }
     })
-  
+
     modal.show()
   })
 }
