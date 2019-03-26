@@ -117,7 +117,7 @@ export default class Dialog {
       // 关闭
       if (!that.willVisible) {
         that.dom.warpper.style.display = 'none'
-        
+
         setTimeout(function () {
           if (that.hadSetStyle) {
             that.options.el.style.overflow = that.elOldStyle.overflow === ''
