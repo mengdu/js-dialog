@@ -1,0 +1,139 @@
+.js-dialog-wrapper,
+.js-dialog-mask {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition: opacity 0.3s ease-out;
+}
+.js-dialog-mask {
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease-out;
+  animation: opacity-fade-in 0.5s;
+}
+.js-dialog-mask-leave {
+  animation: opacity-fade-out 0.5s;
+}
+.js-dialog {
+  background-color: #fff;
+  position: relative;
+  width: 350px;
+  max-width: calc(100% - 30px);
+  margin: 0 auto;
+  box-shadow: 0 2px 20px rgba(26, 26, 26, 0.1);
+  box-sizing: border-box;
+  transition: max-height 0.5s ease;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.js-dialog-enter {
+  animation: dialog-fade-in 0.3s;
+}
+.js-dialog-leave {
+  animation: dialog-fade-out 0.5s;
+}
+.js-dialog-header {
+  height: 35px;
+  line-height: 35px;
+  padding: 0 15px;
+  color: #40424a;
+  font-size: 13px;
+}
+.js-dialog--close {
+  float: right;
+  margin-top: 8px;
+  margin-right: -8px;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  font-size: 20px;
+  font-weight: 100;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+.js-dialog--close:hover {
+  color: #EF4A4A;
+}
+.js-dialog-content {
+  padding: 15px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  color: #182229;
+  max-height: calc(100vh - 24px * 2 - 100px);
+  font-size: 14px;
+}
+.js-dialog-footer {
+  text-align: right;
+  padding: 15px;
+}
+.js-dialog--cancel,
+.js-dialog--confirm {
+  background: none;
+  border: none;
+  border-radius: 3px;
+  outline: none;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 20px;
+  color: #5e6175;
+  cursor: pointer;
+}
+.js-dialog--cancel:hover {
+  color: #D8364B;
+  background-color: #f9ecec;
+}
+.js-dialog--confirm {
+  margin-left: 10px;
+  color: #1297e4;
+}
+.js-dialog--confirm:hover {
+  color: #1297e4;
+  background-color: #f1f0f0;
+}
+@keyframes dialog-fade-in {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes dialog-fade-out {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, -40px, 0);
+    opacity: 0;
+  }
+}
+@keyframes opacity-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes opacity-fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
