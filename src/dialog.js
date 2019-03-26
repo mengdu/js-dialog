@@ -63,6 +63,7 @@ export default class Dialog {
     }
 
     this.visible = false
+    this.willVisible = false
     this.elOldStyle = {}
     this.hadSetStyle = false
 
@@ -114,9 +115,9 @@ export default class Dialog {
 
     on(this.dom.dialog, 'animationend', function () {
       // 关闭
-      if (!that.visible) {
+      if (!that.willVisible) {
         that.dom.warpper.style.display = 'none'
-
+        
         setTimeout(function () {
           if (that.hadSetStyle) {
             that.options.el.style.overflow = that.elOldStyle.overflow === ''
@@ -130,9 +131,11 @@ export default class Dialog {
           that.dom.mask.classList.remove('js-dialog-mask-leave')
           that.dom.dialog.classList.remove('js-dialog-enter')
           that.dom.dialog.classList.remove('js-dialog-leave')
+          that.visible = false
         })
         if (typeof that.options.onClose === 'function') that.options.onClose()
       } else {
+        that.visible = true
         if (typeof that.options.onOpen === 'function') that.options.onOpen()
       }
     })
@@ -173,13 +176,13 @@ export default class Dialog {
       this.options.el.style.marginRight = getScrollWidth() + 'px'
     }
 
-    this.visible = true
+    this.willVisible = true
   }
 
   hide () {
     const that = this
     if (!this.visible) return
-    this.visible = false
+    this.willVisible = false
     // fix 短时间多次点击问题
     this.dom.dialog.classList.remove('js-dialog-leave')
     this.dom.mask.classList.remove('js-dialog-mask-leave')
